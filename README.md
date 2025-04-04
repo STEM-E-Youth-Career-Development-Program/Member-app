@@ -16,7 +16,7 @@ Setting up GitHub:
     <li>Go to this respository, click the green "Code" button, and copy the link under the HTTPS tab.</li>
     <li>Naviagte to the folder you want the Member-app repo to be in (the folder will be created, so don't need to create a separate Member App folder)</li>
     <li>Open terminal in the folder, and run git clone https://github.com/STEM-E-Youth-Career-Development-Program/Member-app.git</li>
-    <li>Congrats. Navigate to VSCode's source control, click the three dots, and click "Pull" just to test. Restart VSCode if necessary.</li>Message a team lead (Jiaming, Prajwala) with your email so we can add you to the GitHub</li>
+    <li>Congrats. Navigate to VSCode's source control, click the three dots, and click "Pull" just to test. Restart VSCode if necessary.</li>Message a team lead (Prasad, Prajwala) with your email so we can add you to the GitHub</li>
 </ol>
 
 Instructions for initializing React Native project:
