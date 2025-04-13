@@ -170,27 +170,22 @@ const CalendarNode = () => {
   }
 
   const handleCapture = async () => {
-    try {
+     try {
       // Capture QR code as an image
-     // console.log(qrCodeRef.current)
-      // const tag = findNodeHandle(qrCodeRef.current);
-      console.log('React tag:', tag); // This will log the React tag (e.g., 1348)
-      const uri = await captureRef(qrCodeRef.current, {
+      var uri = await captureRef(qrCodeRef.current, {
         format: 'png',
         quality: 0.8,
       });
       
-     // const uri = "https://picsum.photos/200"
-  
       // Request permission to access media library
-      const permission = await MediaLibrary.requestPermissionsAsync();
+      var permission = await MediaLibrary.requestPermissionsAsync();
       if (permission.granted) {
         await MediaLibrary.saveToLibraryAsync(uri);
         alert('QR code image saved to your library!');
       } else {
         alert('Permission to access the gallery is required!');
       }
-    } catch (error) {
+   } catch (error) {
       console.error('Failed to capture screenshot', error);
     }
   };
@@ -264,7 +259,7 @@ const CalendarNode = () => {
                 </TouchableOpacity>
                 }
                 {qrVisible && selectedEvent && (
-                  <View ref={qrCodeRef} style={styles.qrContainer}>
+                  <View ref={qrCodeRef} collapsable={false} style={styles.qrContainer}>
                     <QRCode
                       value={`A2k7X9wz|${eventStartTime.day}${eventStartTime.month}${eventStartTime.year}|${eventStartTime.hour}:${eventStartTime.minute} ${eventStartTime.amPM}|${eventEndTime.hour}:${eventEndTime.minute} ${eventEndTime.amPM}|${(selectedEvent.description?.match(/Points:\s*(\d+)/)?.[1] ?? 0)}|${selectedEvent.summary}|${(selectedEvent.description?.match(/Times_Redeemable:\s*([\w\s]+)/)?.[1] ?? "Unlimited")}`}
                       size={150}
