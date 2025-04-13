@@ -3,12 +3,13 @@ import { View, Text, Image, Button, StyleSheet, TouchableOpacity, useWindowDimen
 import { useFocusEffect } from '@react-navigation/native';
 import {Calendar, CalendarUtils, CalendarList, CalendarProvider, LocaleConfig} from 'react-native-calendars';
 import Screen from '../components/Screen';
+import TempProfilePhoto from '../assets/tempProfilePhoto.png';
 import { auth } from '../navigation/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { fetchProfilePicture } from '../components/profilePictureUtils';
 import CalendarNode from '../components/CalendarEventNode';
 
-const CalendarScreen = ({ navigation }) => {
+const CalendarScreen = ({ navigation, props }) => {
   const [user, setUser] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +41,7 @@ const CalendarScreen = ({ navigation }) => {
   };
 
   const handleFetchProfilePicture = () => {
-    fetchProfilePic();
+    fetchProfilePic(); // Fetch the profile picture when the button is pressed
   };
 
   useFocusEffect(
@@ -115,10 +116,8 @@ const CalendarScreen = ({ navigation }) => {
 
       
       <View style={[styles.root, {height: height}, {position: 'absolute'}]}>
-        
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.header}>{"Calendar"}</Text>
-        
         <View>
           <CalendarProvider date="" style={{maxHeight: 340}}>
             <CalendarList
@@ -232,15 +231,16 @@ const CalendarScreen = ({ navigation }) => {
             />
           </CalendarProvider>
         </View>        
-        
         <Text style={styles.header}>{"Upcoming Events"}</Text>
         <CalendarNode />
       </View>
-      {/* <View style={styles.createEventContainer}>
+      {/*
+      <View style={styles.createEventContainer}>
         <TouchableOpacity style={styles.createEventButton} onPress={() => navigation.navigate('EventFormScreen')}>
           <Text style={styles.createEventText}>Create Event</Text>
         </TouchableOpacity>
-      </View> */}
+      </View>
+              */}
     </Screen>
   );
 };

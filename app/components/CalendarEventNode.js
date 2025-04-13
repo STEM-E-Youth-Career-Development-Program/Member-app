@@ -16,7 +16,7 @@ const CalendarNode = () => {
   const [isAdmin, setIsAdmin] = useState(null);
   const [qrVisible, setQrVisible] = useState(false); // State to control QR code visibility
   const [showHideQRCode, setShowHideQRCode] = useState("Show QR Code")
-  const qrCodeRef = useRef(null);
+  const qrCodeRef = useRef();
 
   
     // Function to fetch events from the backe
@@ -170,26 +170,22 @@ const CalendarNode = () => {
   }
 
   const handleCapture = async () => {
-    try {
+     try {
       // Capture QR code as an image
-      // console.log(qrCodeRef.current)
-      // const tag = findNodeHandle(qrCodeRef.current);
-      const uri = await captureRef(qrCodeRef.current, {
+      var uri = await captureRef(qrCodeRef.current, {
         format: 'png',
-        quality: 1,
+        quality: 0.8,
       });
       
-      // const uri = "https://picsum.photos/200"
-  
       // Request permission to access media library
-      const permission = await MediaLibrary.requestPermissionsAsync();
+      var permission = await MediaLibrary.requestPermissionsAsync();
       if (permission.granted) {
         await MediaLibrary.saveToLibraryAsync(uri);
         alert('QR code image saved to your library!');
       } else {
         alert('Permission to access the gallery is required!');
       }
-    } catch (error) {
+   } catch (error) {
       console.error('Failed to capture screenshot', error);
     }
   };
@@ -380,3 +376,4 @@ const styles = StyleSheet.create({
 })
 
 export default CalendarNode;
+

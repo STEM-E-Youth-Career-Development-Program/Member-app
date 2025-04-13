@@ -11,7 +11,7 @@ import DashboardNavigator from './DashboardNavigator';
 import SocialsScreen from '../screens/SocialsScreen';
 // import RedeemQRCodeScreen from '../screens/RedeemQRCodeScreen';
 import RedeemQRCodeNavigator from './RedeemQRCodeNavigator';
-
+import RedeemCodeNavigator from './RedeemCodeNavigator';
 import adminCheck from '../components/AdminCheck';
 
 const Tab = createBottomTabNavigator();
@@ -68,6 +68,16 @@ const AppNavigator = () => {
   <Tab.Screen
     name="RedeemQRCodeNavigator"
     component={RedeemQRCodeNavigator}
+    options={{
+      tabBarIcon: ({ size }) => (
+        <FontAwesome name="qrcode" size={size} color="#fff" />  // Using FontAwesome's 'qrcode' icon
+      ),
+      title: '',
+    }}
+  />
+    <Tab.Screen
+    name="RedeemCodeNavigator"
+    component={RedeemCodeNavigator}
     options={{
       tabBarIcon: ({ size }) => (
         <FontAwesome name="qrcode" size={size} color="#fff" />  // Using FontAwesome's 'qrcode' icon
