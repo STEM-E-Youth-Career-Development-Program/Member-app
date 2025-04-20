@@ -61,10 +61,17 @@ export default function App() {
 
   async function updateUserPoints(userId) {
     const userRef = doc(db, "users", userId);
-    const tasksCollectionRef = collection(userRef, "Events");
+    const eventsCollectionRef = collection(userRef, "Events");
+    const tasksCollectionRef = collection(userRef, "Tasks");
 
+    const eventSnapshot = await getDocs(eventsCollectionRef);
     const taskSnapshot = await getDocs(tasksCollectionRef);
     let totalPoints = 0;
+
+    eventSnapshot.forEach((doc) => {
+      const eventData = doc.data();
+      totalPoints += parseInt(eventData.points, 10) || 0;
+    });
 
     taskSnapshot.forEach((doc) => {
       const taskData = doc.data();
@@ -73,17 +80,6 @@ export default function App() {
 
     await setDoc(userRef, { points: totalPoints }, { merge: true });
   }
-
-  /*
-  function generateRandomAsciiCode() {
-    let code = "";
-    for (let i = 0; i < 8; i++) {
-      const randomAscii = Math.floor(Math.random() * 94) + 33;
-      code += String.fromCharCode(randomAscii);
-    }
-    return code;
-  }
-    */
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true); // Prevent further scans immediately
