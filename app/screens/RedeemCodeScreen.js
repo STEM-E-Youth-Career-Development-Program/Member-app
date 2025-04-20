@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { collection, doc, getDoc, setDoc, getFirestore, getDocs } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { tasks } from 'firebase-functions';
+import { CurrentRenderContext } from '@react-navigation/native';
 
 const validationSchema = Yup.object().shape({
   code: Yup.string().required().label('Code'),
@@ -162,6 +163,7 @@ function RedeemCodeScreen({ navigation }) {
             onSubmit={handleRedeem}
             validationSchema={validationSchema}
           >
+            
             <AppFormField
               name="code"
               placeholder="Enter code"
@@ -170,15 +172,15 @@ function RedeemCodeScreen({ navigation }) {
               width="80%"
               onChangeText={(text) => {
                 codeValue = text;
-              }}
+              }}   
             />
-          </AppForm>
 
+          </AppForm>
           <TouchableOpacity
             onPress={() => handleRedeem({ code: codeValue })}
-            style={styles.button}
+            style={styles.buttonredeem}
           >
-            <Text style={styles.buttonText}>Redeem Code</Text>
+            <Text style={styles.buttonredeemText}>Redeem Code</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -206,31 +208,53 @@ export default RedeemCodeScreen;
 
 const styles = StyleSheet.create({
   screen: {
-    justifyContent: 'center',
+    height: '90%',
+    width: '100%',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    justifyContent: 'center',
   },
   container: {
     alignItems: 'center',
-    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor:"white"
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginTop: 20,
     color: 'white',
   },
   button: {
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+    marginTop: 20,
+    height: 33,
+    width: 180,
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  buttonredeem: {
     backgroundColor: '#6200ee',
     borderRadius: 5,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
     marginTop: 20,
+    marginBottom: 50,
+    height: 35,
+    width: 250,
+    justifyContent: 'center', 
+    alignItems: 'center',
+  },
+  buttonredeemText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: 'bold',
   },
   infoContainer: {
@@ -255,5 +279,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     fontWeight: 'bold',
+    
   },
 });
