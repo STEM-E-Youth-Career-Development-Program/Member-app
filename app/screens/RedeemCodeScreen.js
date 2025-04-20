@@ -1,17 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import AppForm from '../components/AppForm';
 import AppFormField from '../components/AppFormField';
 import Screen from '../components/Screen';
 import * as Yup from 'yup';
+import { collection, doc, getDoc, setDoc, getFirestore, getDocs } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { tasks } from 'firebase-functions';
 
 const validationSchema = Yup.object().shape({
   code: Yup.string().required().label('Code'),
 });
 
+
+
+
 function RedeemCodeScreen({ navigation }) {
   const [message, setMessage] = useState('');
   const [redeemedData, setRedeemedData] = useState(null); // Store redeemed information
+  const [userId, setUserId] = useState('');
+  const [userName, setUserName] = useState('Guest');
+
+  const db = getFirestore();
+
+
+  useEffect(() => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      setUserId(currentUser.uid);
+      setUserName(currentUser.displayName || "Guest");
+    } else {
+      console.log("No user is signed in.");
+    }
+  }, []);
+
+  async function addTask(userId, redeemedInfo) {
+    console.log("Adding task for user:", userId, redeemedInfo);
+  
+    const userRef = doc(db, "users", userId);
+    const userSnapshot = await getDoc(userRef);
+  
+    // Step 1: Create the user document if it doesn't exist
+    if (!userSnapshot.exists()) {
+      await setDoc(userRef, {
+        name: userName,
+      });
+    }
+  
+    // Step 2: Reference the "Events" subcollection and task document
+    const tasksCollectionRef = collection(userRef, "Tasks");
+    const taskDocRef = doc(tasksCollectionRef, redeemedInfo.taskName);
+    const taskDocSnapshot = await getDoc(taskDocRef);
+  
+    // Step 3: Only add the task if it doesn’t already exist
+  //  if (!taskDocSnapshot.exists()) {
+      await setDoc(taskDocRef, {
+        ...redeemedInfo,
+      });
+      console.log("Task added successfully.");
+      updateUserPoints(userId); // Update user points after adding the task
+ //   } else {
+  //    console.log("Task already exists. Skipping.");
+   // }
+  }
+
+  async function updateUserPoints(userId) {
+    const userRef = doc(db, "users", userId);
+    const eventsCollectionRef = collection(userRef, "Events");
+    const tasksCollectionRef = collection(userRef, "Tasks");
+
+    const eventSnapshot = await getDocs(eventsCollectionRef);
+    const taskSnapshot = await getDocs(tasksCollectionRef);
+    let totalPoints = 0;
+
+    eventSnapshot.forEach((doc) => {
+      const eventData = doc.data();
+      totalPoints += parseInt(eventData.points, 10) || 0;
+    });
+
+    taskSnapshot.forEach((doc) => {
+      const taskData = doc.data();
+      totalPoints += parseInt(taskData.points, 10) || 0;
+    });
+
+    await setDoc(userRef, { points: totalPoints }, { merge: true });
+  }
 
   const handleRedeem = ({ code }) => {
 
@@ -21,6 +95,7 @@ function RedeemCodeScreen({ navigation }) {
       setMessage("This code is invalid. Please try again.");
       setRedeemedData(null); // Clear any previous data
     } else {
+      
       setMessage("Success! The code is valid.");
 
       // Example data for a valid code
@@ -32,6 +107,8 @@ function RedeemCodeScreen({ navigation }) {
         timesRedeemed: 1,
         notes: "20 points first time, 10 points each time after that.",
       };
+
+      addTask(userId, redeemedInfo)
 
       setRedeemedData(redeemedInfo); // Set the redeemed data
     }
