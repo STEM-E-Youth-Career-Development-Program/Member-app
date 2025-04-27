@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icons from 'react-native-vector-icons/Octicons';
 import { auth, app } from '../navigation/firebase';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import CalendarScreen from '../screens/CalendarScreen';
 import AdminScreen from '../screens/AdminScreen';
@@ -80,7 +81,7 @@ const AppNavigator = () => {
     component={RedeemCodeNavigator}
     options={{
       tabBarIcon: ({ size }) => (
-        <FontAwesome name="qrcode" size={size} color="#fff" />  // Using FontAwesome's 'qrcode' icon
+        <Ionicons name="scan" size={size} color="#fff" />
       ),
       title: '',
     }}
